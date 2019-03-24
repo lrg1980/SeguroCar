@@ -1,13 +1,52 @@
 import React, { Component } from 'react';
 
 class Formulario extends Component {
+
+     // refs son para leer los valores de los valores de un formulario
+
+     constructor(props){
+          super(props);
+          this.marcaRef = React.createRef();
+          this.yearRef = React.createRef();
+          this.planBasicoRef = React.createRef();
+          this.planCompletoRef = React.createRef();
+     }
+
+     cotizarSeguro = (e) => {
+          e.preventDefault();
+
+          console.log(this.marcaRef);
+
+          // leer el plan
+          const plan = this.planBasicoRef.current.checked ? 'basico' : 'completo';
+          
+          // obtener los datos
+          console.log(this.marcaRef.current.value);
+
+          // crear el objeto
+          const infoAuto = {
+               marca: this.marcaRef.current.value, 
+               year: this.yearRef.current.value,
+               plan: plan
+          }
+          //console.log(infoAuto)
+
+          // enviarlo al componente principal
+          this.props.cotizarSeguro(infoAuto)
+
+          // reiniciar el formulario y lo deja por defecto una vez que el usuario indica su cotización (opcional)
+          // e.currentTarget.reset()
+     }
+
+
      render() {
           return(
-               <form className = "cotizar-auto">
+               <form className = "cotizar-auto" onSubmit={this.cotizarSeguro}>
                          <div className = "campo">
                               <label > Marca </label> 
-                              <select name = "marca">
+                              <select name = "marca" ref={this.marcaRef}>
                                    <option value = "americano"> Americano </option> 
+                                   <option value = "argentino" > Argentino </option> 
                                    <option value = "europeo" > Europeo </option> 
                                    <option value = "asiatico" > Asiatico </option> 
                               </select> 
@@ -15,7 +54,7 @@ class Formulario extends Component {
 
                          <div className = "campo">
                               <label > Año </label> 
-                              <select name="year">
+                              <select name="year" ref={this.yearRef}>
                                    <option value = "2018" > 2018 </option> 
                                    <option value = "2017" > 2017 </option> 
                                    <option value = "2016" > 2016 </option> 
@@ -31,8 +70,8 @@ class Formulario extends Component {
                          </div> 
                          <div className="campo">
                               <label> Plan: </label> 
-                              <input type = "radio" name = "plan" value = "basico" /> Básico 
-                              <input type = "radio"name = "plan" value = "completo" /> Completo 
+                              <input type = "radio" name = "plan" value = "basico" ref={this.planBasicoRef} /> Básico 
+                              <input type = "radio"name = "plan" value = "completo" ref={this.planCompletoRef} /> Completo 
                          </div>
                          <button type = "submit" className = "boton" > Cotizar </button> 
                     </form>
